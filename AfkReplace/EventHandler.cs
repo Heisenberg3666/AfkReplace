@@ -27,6 +27,11 @@ namespace AfkReplace
                     Log.Debug($"Spectator ({player.Nickname}) has been set to {player.Role}.", Plugin.Instance.Config.DebugMode);
                     player.Teleport(ev.Target.Position);
                     Log.Debug($"Spectator ({player.Nickname}) has been teleported to {player.Position}.", Plugin.Instance.Config.DebugMode);
+                    player.ClearInventory();
+                    player.AddItem(ev.Target.Items);
+                    Log.Debug($"Spectator ({player.Nickname}) has been given {ev.Target.Nickname}'s items.", Plugin.Instance.Config.DebugMode);
+                    player.Health = ev.Target.Health;
+                    Log.Debug($"Spectator ({player.Nickname}) has been given {ev.Target.Nickname}'s health.", Plugin.Instance.Config.DebugMode);
                 });
             }
             catch (NotEnoughSpectatorsException)
