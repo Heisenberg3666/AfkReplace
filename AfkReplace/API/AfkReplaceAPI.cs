@@ -10,14 +10,14 @@ namespace AfkReplace.API
 {
     public static class AfkReplaceAPI
     {
-        public static IEnumerable<Player> Spectators = new List<Player>();
+        public static List<Player> Spectators = new List<Player>();
 
         public static Player RandomSpectator()
         {
             foreach (Player pl in Player.List)
             {
                 if (!pl.IsAlive)
-                    Spectators.Append(pl);
+                    Spectators.Add(pl);
             }
 
             if (Spectators.Count() == 0)
