@@ -10,23 +10,28 @@ namespace AfkReplace
     {
         public void OnKicking(KickingEventArgs ev)
         {
-            if (!ev.Target.IsAlive)
+            if (!ev.FullMessage.ToLower().Contains("afk") && !ev.Target.IsAlive)
                 return;
 
-            if (!ev.FullMessage.ToLower().Contains("afk"))
-                return;
+
+            Log.Debug($"Player {ev.Target.Nickname} is being kicked.", Plugin.Instance.Config.DebugMode);
+            Log.Debug($"Their position is {ev.Target.Position}.", Plugin.Instance.Config.DebugMode);
 
             try
             {
                 Player player = AfkReplaceAPI.RandomSpectator();
+                Log.Debug("Random spectator selected.", Plugin.Instance.Config.DebugMode);
                 Timing.CallDelayed(5f, () =>
                 {
                     player.SetRole(ev.Target.Role.Type);
+                    Log.Debug($"Spectator ({player.Nickname}) has been set to {player.Role}.", Plugin.Instance.Config.DebugMode);
                     player.Teleport(ev.Target.Position);
+                    Log.Debug($"Spectator ({player.Nickname}) has been teleported to {player.Position}.", Plugin.Instance.Config.DebugMode);
                 });
             }
             catch (NotEnoughSpectatorsException)
             {
+                Log.Debug($"There are not enough spectators to replace {ev.Target.Nickname}.", Plugin.Instance.Config.DebugMode);
                 return;
             }
         }
